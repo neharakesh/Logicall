@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,19 +9,21 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
-import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 
-const pages = ["Home", "Add Movie", "Login", "Signup"];
+const pages = [
+  { name: "Home", path: "/" },
+  { name: "Add Movie", path: "/addmovie" },
+  { name: "Login", path: "/login" },
+  { name: "Signup", path: "/signup" },
+];
 const settings = ["Profile", "Logout"];
 
 const ResponsiveAppBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
-  const handleCloseNavMenu = () => setAnchorElNav(null);
   const handleCloseUserMenu = () => setAnchorElUser(null);
 
   return (
@@ -43,7 +46,9 @@ const ResponsiveAppBar = () => {
             fontWeight: 600,
             color: "#fff",
             letterSpacing: "1px",
+            cursor: "pointer",
           }}
+          onClick={() => navigate("/")}
         >
           🎬 MovieVerse
         </Typography>
@@ -52,7 +57,8 @@ const ResponsiveAppBar = () => {
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
           {pages.map((page) => (
             <Button
-              key={page}
+              key={page.name}
+              onClick={() => navigate(page.path)}
               sx={{
                 color: "#fff",
                 fontWeight: 500,
@@ -60,7 +66,7 @@ const ResponsiveAppBar = () => {
                 "&:hover": { color: "#ffd700" },
               }}
             >
-              {page}
+              {page.name}
             </Button>
           ))}
         </Box>
@@ -91,4 +97,3 @@ const ResponsiveAppBar = () => {
 };
 
 export default ResponsiveAppBar;
-
