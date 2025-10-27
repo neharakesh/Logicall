@@ -3,7 +3,7 @@ import { getMovies } from "../api/api.js";
 import Slider from "react-slick"; // slick carousel
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Navbar from "../components/navbar.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
@@ -35,8 +35,8 @@ const Home = () => {
   };
 
   return (
-        <>
-        <Navbar />
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
       {/* Header Section */}
       <header className="py-6 text-center">
@@ -116,4 +116,3 @@ const Home = () => {
 };
 
 export default Home;
-
