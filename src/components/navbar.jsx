@@ -14,8 +14,8 @@ import Button from "@mui/material/Button";
 const pages = [
   { name: "Home", path: "/" },
   { name: "Add Movie", path: "/addmovie" },
-  { name: "Login", path: "/login" },
-  { name: "Signup", path: "/signup" },
+  { name: "Update", path: "/update" },
+  
 ];
 const settings = ["Profile", "Logout"];
 

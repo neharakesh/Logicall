@@ -1,22 +1,42 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Home from "./pages/home.jsx";
-import Movie from "./pages/moviepage.jsx";
-import Login from "./pages/login.jsx";
-import Signup from "./pages/signup.jsx";
-
-const App = () => {
+import AddMovie from "./pages/moviepage.jsx";
+import PrivateRoute from "./components/privateroute.jsx";
+import Update from "./pages/update.jsx";
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/addMovie" element={<Movie />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/update" element={<Update />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/addmovie"
+          element={
+            <PrivateRoute>
+              <AddMovie />
+            </PrivateRoute>
+          }
+        />
+        
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
-};
+}
 
 export default App;
+
 

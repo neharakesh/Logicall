@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getMovies } from "../api/api.js";
-import Slider from "react-slick"; // slick carousel
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/Navbar.jsx";  
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
 
-  // Fetch movies on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getMovies(1, 20);
-        const data = res.data?.movies || res.data?.data || [];
-        setMovies(data);
+        const res = await getMovies();
+        setMovies(res.data.movies || res.data || []);
       } catch (err) {
         console.error("Error fetching movies:", err);
       }
@@ -22,7 +20,6 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // Carousel Settings
   const settings = {
     dots: true,
     infinite: true,
@@ -35,10 +32,9 @@ const Home = () => {
   };
 
   return (
-    <>
-    <Navbar/>
+    <><Navbar />
+    
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
-      {/* Header Section */}
       <header className="py-6 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-yellow-400 tracking-wide drop-shadow-lg">
           🎬 Favorite Movies & TV Shows
@@ -48,13 +44,12 @@ const Home = () => {
         </p>
       </header>
 
-      {/* Carousel Section */}
       <div className="max-w-4xl mx-auto mt-6 rounded-lg overflow-hidden shadow-2xl">
         <Slider {...settings}>
           {movies.slice(0, 5).map((movie) => (
             <div key={movie._id} className="relative">
               <img
-                src={`https://picsum.photos/seed/${movie.title}/900/400`} // random placeholder
+                src={`https://picsum.photos/seed/${movie.title}/900/400`}
                 alt={movie.title}
                 className="w-full h-[400px] object-cover"
               />
@@ -69,7 +64,6 @@ const Home = () => {
         </Slider>
       </div>
 
-      {/* Movie List Section */}
       <section className="max-w-6xl mx-auto mt-10 px-6">
         <h2 className="text-3xl font-semibold mb-4 border-l-4 border-yellow-400 pl-3">
           🎥 Recently Added Movies
@@ -106,7 +100,6 @@ const Home = () => {
         )}
       </section>
 
-      {/* Footer */}
       <footer className="text-center text-gray-400 mt-10 pb-6 text-sm">
         © {new Date().getFullYear()} Movie Explorer | Made with ❤️ by Neha Rajpoot
       </footer>
