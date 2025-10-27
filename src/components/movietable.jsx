@@ -9,32 +9,25 @@ const MovieTable = ({ onEdit }) => {
   const [loading, setLoading] = useState(false);
 
   const fetchMovies = async () => {
-    if (loading) return; // prevent double fetch
+    if (loading) return;
     setLoading(true);
 
     try {
       const res = await getMovies(page, 10);
-      console.log('API Response:', res.data);
+      const fetched = res.data?.movies || res.data?.data || [];
 
-      // Handle response data
-      const fetchedMovies = res.data?.data || res.data?.movies || res.data || [];
+      if (Array.isArray(fetched)) {
+        const uniqueMovies = [
+          ...movies,
+          ...fetched.filter((m) => !movies.some((movie) => movie._id === m._id)),
+        ].filter((v, i, a) => a.findIndex((t) => t._id === v._id) === i);
 
-      if (Array.isArray(fetchedMovies) && fetchedMovies.length > 0) {
-        // Filter out duplicates
-        const uniqueNewMovies = fetchedMovies.filter(
-          (m) => !movies.some((movie) => movie._id === m._id)
-        );
-
-        // Update state using functional setState to avoid stale closure
-        setMovies((prevMovies) => [...prevMovies, ...uniqueNewMovies]);
-
-        setPage((prevPage) => prevPage + 1);
-        setHasMore(uniqueNewMovies.length > 0);
-      } else {
-        setHasMore(false);
+        setMovies(uniqueMovies);
+        setHasMore(fetched.length > 0);
+        setPage((prev) => prev + 1);
       }
-    } catch (error) {
-      console.error('Error fetching movies:', error);
+    } catch (err) {
+      console.error('Error fetching movies:', err);
       setHasMore(false);
     } finally {
       setLoading(false);
@@ -45,9 +38,9 @@ const MovieTable = ({ onEdit }) => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
       try {
         await deleteMovie(id);
-        setMovies((prevMovies) => prevMovies.filter((m) => m._id !== id));
-      } catch (error) {
-        console.error('Error deleting movie:', error);
+        setMovies((prev) => prev.filter((m) => m._id !== id));
+      } catch (err) {
+        console.error('Error deleting movie:', err);
       }
     }
   };
@@ -57,58 +50,76 @@ const MovieTable = ({ onEdit }) => {
   }, []);
 
   return (
-    <InfiniteScroll
-      dataLength={movies.length}
-      next={fetchMovies}
-      hasMore={hasMore}
-      loader={<h4 className="text-center my-4">Loading...</h4>}
-      className="overflow-auto max-h-[500px]"
-    >
-      <table className="table-auto w-full border">
-        <thead className="bg-gray-200 sticky top-0">
-          <tr>
-            <th className="px-2 py-1">Title</th>
-            <th className="px-2 py-1">Type</th>
-            <th className="px-2 py-1">Director</th>
-            <th className="px-2 py-1">Budget</th>
-            <th className="px-2 py-1">Location</th>
-            <th className="px-2 py-1">Duration</th>
-            <th className="px-2 py-1">Year</th>
-            <th className="px-2 py-1">Details</th>
-            <th className="px-2 py-1">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movies.map((movie) => (
-            <tr key={movie._id} className="border-b hover:bg-gray-50">
-              <td className="px-2 py-1">{movie.title}</td>
-              <td className="px-2 py-1">{movie.type}</td>
-              <td className="px-2 py-1">{movie.director}</td>
-              <td className="px-2 py-1">{movie.budget}</td>
-              <td className="px-2 py-1">{movie.location}</td>
-              <td className="px-2 py-1">{movie.duration}</td>
-              <td className="px-2 py-1">{movie.year}</td>
-              <td className="px-2 py-1">{movie.details}</td>
-              <td className="px-2 py-1 flex gap-2">
-                <button
-                  onClick={() => onEdit(movie)}
-                  className="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(movie._id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </InfiniteScroll>
+    <div className="p-4">
+      <h2 className="text-xl font-semibold mb-3 text-gray-800">🎬 Movie List</h2>
+
+      <div className="border rounded-lg shadow-md overflow-hidden">
+        <InfiniteScroll
+          dataLength={movies.length}
+          next={fetchMovies}
+          hasMore={hasMore}
+          loader={<p className="text-center py-3 text-gray-500">Loading more...</p>}
+          className="overflow-auto max-h-[500px]"
+        >
+          <table className="w-full border-collapse">
+            <thead className="bg-gray-100 sticky top-0 shadow-sm">
+              <tr className="text-left">
+                <th className="p-2">Title</th>
+                <th className="p-2">Type</th>
+                <th className="p-2">Director</th>
+                <th className="p-2">Budget</th>
+                <th className="p-2">Location</th>
+                <th className="p-2">Duration</th>
+                <th className="p-2">Year</th>
+                <th className="p-2">Details</th>
+                <th className="p-2 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {movies.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-6 text-gray-500">
+                    No movies found 😢
+                  </td>
+                </tr>
+              ) : (
+                movies.map((movie) => (
+                  <tr
+                    key={movie._id}
+                    className="border-b hover:bg-gray-50 transition-all"
+                  >
+                    <td className="p-2 font-medium text-gray-800">{movie.title}</td>
+                    <td className="p-2">{movie.type}</td>
+                    <td className="p-2">{movie.director}</td>
+                    <td className="p-2">{movie.budget}</td>
+                    <td className="p-2">{movie.location}</td>
+                    <td className="p-2">{movie.duration}</td>
+                    <td className="p-2">{movie.year}</td>
+                    <td className="p-2">{movie.details}</td>
+                    <td className="p-2 flex gap-2 justify-center">
+                      <button
+                        onClick={() => onEdit(movie)}
+                        className="bg-yellow-400 text-white px-3 py-1 rounded-md hover:bg-yellow-500"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(movie._id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </InfiniteScroll>
+      </div>
+    </div>
   );
 };
 
 export default MovieTable;
+

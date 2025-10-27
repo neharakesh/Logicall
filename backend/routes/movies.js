@@ -3,7 +3,7 @@ import Movie from '../models/movie.js';
 
 const router = express.Router();
 
-// ➕ Add a new movie
+//  Add a new movie
 router.post('/', async (req, res) => {
   try {
     const movie = new Movie(req.body);
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 📜 Get movies with pagination
+// Get movies with pagination
 router.get('/', async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
