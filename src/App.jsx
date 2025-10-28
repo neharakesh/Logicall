@@ -10,13 +10,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/update" element={<Update />} />
+       
 
         {/* Protected routes */}
         <Route
-          path="/"
+          path="/home"
           element={
             <PrivateRoute>
               <Home />
@@ -28,6 +28,14 @@ function App() {
           element={
             <PrivateRoute>
               <AddMovie />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/update"
+          element={
+            <PrivateRoute>
+              <Update />
             </PrivateRoute>
           }
         />
