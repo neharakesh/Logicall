@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getMovies, deleteMovie, updateMovie } from "../api/api.js";
-import Navbar from "../components/navbar.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const Update = () => {
   const [movies, setMovies] = useState([]);
