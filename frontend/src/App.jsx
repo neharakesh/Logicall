@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login.jsx";
-import Signup from "./pages/Signup.jsx";
+import Signup from "./pages/signup.jsx";
 import Home from "./pages/home.jsx";
 import AddMovie from "./pages/moviepage.jsx";
 import PrivateRoute from "./components/privateroute.jsx";
