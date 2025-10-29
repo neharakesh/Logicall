@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 
 const pages = [
-  { name: "Home", path: "/" },
+  { name: "Home", path: "/home" },
   { name: "Add Movie", path: "/addmovie" },
   { name: "Update", path: "/update" },
   
