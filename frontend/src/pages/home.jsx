@@ -3,7 +3,7 @@ import { getMovies } from "../api/api.js";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Navbar from "../components/Navbar.jsx";  
+import Navbar from "../components/navbar.jsx";  
 
 const Home = () => {
   const [movies, setMovies] = useState([]);

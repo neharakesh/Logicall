@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MovieForm from "../components/movieform.jsx";
 import { createMovie, updateMovie } from "../api/api.js";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/navbar.jsx";
 
 const MoviePage = () => {
   const [editingMovie, setEditingMovie] = useState(null);
